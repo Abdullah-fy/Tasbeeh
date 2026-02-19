@@ -1,0 +1,6 @@
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\dist\win\Tasbeeh.pdb
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\dist\win\Assets\core_texts.json
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\dist\win\av_libglesv2.dll
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\dist\win\libHarfBuzzSharp.dll
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\dist\win\libSkiaSharp.dll
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\dist\win\Tasbeeh.exe

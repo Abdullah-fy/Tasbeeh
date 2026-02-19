@@ -1,0 +1,87 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ToastrForge.Views.ToastWindow"
+        Title=""
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        ShowActivated="False"
+        Focusable="False"
+        WindowStartupLocation="Manual">
+
+    <Window.Styles>
+        <Style Selector="Border.ToastRoot">
+            <Setter Property="Background" Value="#1e1e1e"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="MinWidth" Value="280"/>
+            <Setter Property="MaxWidth" Value="360"/>
+            <Setter Property="BoxShadow" Value="0 8 32 0 #80000000"/>
+        </Style>
+    </Window.Styles>
+
+    <Border Padding="12">
+        <Border x:Name="ToastRoot" Classes="ToastRoot">
+            <Grid RowDefinitions="Auto,4,Auto">
+
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+
+                    <Border Grid.Column="0"
+                            x:Name="IconBorder"
+                            Width="36" Height="36"
+                            CornerRadius="18"
+                            Background="#2a2a3a"
+                            IsVisible="True"
+                            VerticalAlignment="Center"
+                            Margin="0,0,12,0">
+                        <TextBlock x:Name="IconText"
+                                   Text="🔔"
+                                   FontSize="16"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                        <TextBlock x:Name="TitleBlock"
+                                   Text="تذكير"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="#ffffff"
+                                   IsVisible="False"/>
+                        <TextBlock x:Name="MessageBlock"
+                                   Text=""
+                                   FontSize="15"
+                                   Foreground="#e8e8f0"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Right"
+                                   FlowDirection="RightToLeft"
+                                   LineHeight="22"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center"
+                                Margin="10,0,0,0">
+                        <TextBlock Text="✦" FontSize="16"
+                                   Foreground="#7c6af5" Opacity="0.7"/>
+                    </StackPanel>
+
+                </Grid>
+
+                <Border Grid.Row="2" x:Name="ProgressBarContainer"
+                        Height="2" CornerRadius="1"
+                        Background="#2a2a3a" Margin="0,6,0,0">
+                    <Border x:Name="ProgressBar"
+                            Height="2" CornerRadius="1"
+                            Background="#7c6af5"
+                            HorizontalAlignment="Left"
+                            Width="0"/>
+                </Border>
+
+            </Grid>
+        </Border>
+    </Border>
+
+</Window>

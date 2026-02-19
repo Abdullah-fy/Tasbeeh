@@ -1,0 +1,542 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ToastrForge.ViewModels"
+        xmlns:models="clr-namespace:ToastrForge.Models"
+        xmlns:views="clr-namespace:ToastrForge.Views"
+        xmlns:converters="clr-namespace:ToastrForge.Converters"
+        x:Class="ToastrForge.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Tasbeeh"
+        Width="1020" Height="600"
+        MinWidth="820" MinHeight="520"
+        Background="#161618"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Icon="/Assets/tasbeeh.png"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#e8e8f0"/>
+            <Setter Property="FontFamily" Value="Segoe UI, Arial"/>
+        </Style>
+        <Style Selector="TextBlock.SectionHeader">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#e8e8f0"/>
+        </Style>
+        <Style Selector="TextBlock.Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#9898b0"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#1e1e28"/>
+            <Setter Property="BorderBrush" Value="#2a2a3a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#e8e8f0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#1e1e28"/>
+            <Setter Property="BorderBrush" Value="#2a2a3a"/>
+            <Setter Property="Foreground" Value="#e8e8f0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="MinHeight" Value="34"/>
+        </Style>
+        <Style Selector="Slider">
+            <Setter Property="Foreground" Value="#7c6af5"/>
+        </Style>
+        <Style Selector="Button.Primary">
+            <Setter Property="Background" Value="#7c6af5"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.Primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6a5ae0"/>
+        </Style>
+        <Style Selector="Button.Ghost">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#9898b0"/>
+            <Setter Property="BorderBrush" Value="#2a2a3a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.Danger">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#f55d5d"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.Tab">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#6e6e8a"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.Tab.Active">
+            <Setter Property="Foreground" Value="#e8e8f0"/>
+            <Setter Property="Background" Value="#1e1e28"/>
+        </Style>
+        <Style Selector="Border.Card">
+            <Setter Property="Background" Value="#1a1a22"/>
+            <Setter Property="BorderBrush" Value="#252535"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+        <Style Selector="Border.Divider">
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Background" Value="#252535"/>
+            <Setter Property="Margin" Value="0,6"/>
+        </Style>
+        <Style Selector="ColorPicker">
+             <Setter Property="IsAlphaEnabled" Value="True"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="36,*" FlowDirection="{Binding FlowDirection}">
+
+        <Grid Grid.Row="0" Background="#0f0f14" ColumnDefinitions="Auto,*,Auto">
+            <Border Grid.Column="0" Grid.ColumnSpan="3"
+                    Background="Transparent"
+                    PointerPressed="TitleBar_PointerPressed"/>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal"
+                        VerticalAlignment="Center" Margin="14,0">
+                <TextBlock Text="&#128255;" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock Text="{Binding LabelAppName}" FontSize="12" FontWeight="SemiBold"
+                           Foreground="#9898b0" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                        VerticalAlignment="Center" Margin="0,0,4,0">
+                <Button Content="{Binding LabelLanguageToggle}"
+                        Command="{Binding ToggleLanguage}"
+                        Background="Transparent" Foreground="#7c6af5"
+                        BorderThickness="0" Margin="0,0,10,0"
+                        Cursor="Hand"/>
+
+                <Button Content="—" Click="MinimizeWindow"
+                        Background="Transparent" Foreground="#6e6e8a"
+                        BorderThickness="0" Width="32" Height="32"
+                        FontSize="11" Cursor="Hand"/>
+                <Button Content="✕" Click="CloseWindow"
+                        Background="Transparent" Foreground="#6e6e8a"
+                        BorderThickness="0" Width="32" Height="32"
+                        FontSize="12" Cursor="Hand"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="260,*">
+
+            <Border Grid.Column="0" Background="#111118"
+                    BorderBrush="#1e1e2a" BorderThickness="0,0,1,0">
+                <DockPanel>
+
+                    <StackPanel DockPanel.Dock="Top" Margin="10,12,10,0" Spacing="2">
+                        <Button x:Name="BtnTabSettings" Content="{Binding LabelSettings}"
+                                Classes="Tab Active" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Click="ShowSettingsTab" CornerRadius="8"/>
+                        <Button x:Name="BtnTabTexts" Content="{Binding LabelTexts}"
+                                Classes="Tab" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Click="ShowTextsTab" CornerRadius="8"/>
+                        <Button x:Name="BtnTabHowToUse" Content="{Binding LabelHowToUse}"
+                                Classes="Tab" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Click="ShowHowToUseTab" CornerRadius="8"/>
+
+                    </StackPanel>
+
+                    <Border DockPanel.Dock="Bottom" Margin="12,0,12,14">
+                        <StackPanel Spacing="6">
+
+                            <Border Classes="Card" Padding="12">
+                                <StackPanel Spacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding LabelEnable}"
+                                                   Classes="Label" VerticalAlignment="Center"/>
+                                        <ToggleSwitch Grid.Column="1"
+                                                      IsChecked="{Binding IsEnabled}"
+                                                      HorizontalAlignment="Right"
+                                                      OffContent="" OnContent=""/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding LabelEvery}" Classes="Label"
+                                                   VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                            <NumericUpDown Value="{Binding IntervalMinutes}"
+                                                           Minimum="1" Maximum="1440"
+                                                           Width="120" FontSize="12"
+                                                           VerticalContentAlignment="Center"
+                                                           Background="#1e1e28"
+                                                           BorderBrush="#2a2a3a"
+                                                           Foreground="#e8e8f0"/>
+                                            <TextBlock Text="{Binding LabelMinute}" Classes="Label"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock Text="{Binding IntervalErrorText}" 
+                                               Foreground="#ff5555" FontSize="11" 
+                                               HorizontalAlignment="Right"
+                                               IsVisible="{Binding IntervalErrorText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="{Binding LabelTest}"
+                                    Classes="Ghost" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Click="TestToast_Click"/>
+                            <Button Content="{Binding LabelSave}"
+                                    Classes="Primary" HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Click="SaveSettings_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border/>
+
+                </DockPanel>
+            </Border>
+
+            <Grid Grid.Column="1" RowDefinitions="*,Auto">
+
+                <ScrollViewer x:Name="SettingsTab" Grid.Row="0" Padding="20,20,20,40"
+                              VerticalScrollBarVisibility="Visible">
+                    <StackPanel Spacing="16">
+
+                        <Border Classes="Card">
+                            <StackPanel Spacing="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="{Binding LabelAppearance}" Classes="SectionHeader"/>
+                                    <TextBlock Text="^" FontSize="12" Foreground="#666"/>
+                                </Grid>
+                                
+                                <Grid ColumnDefinitions="*,24,*">
+                                    <StackPanel Grid.Column="0" Spacing="6">
+                                        <TextBlock Text="{Binding LabelBackgroundColor}" Classes="Label"/>
+                                        <Grid ColumnDefinitions="*,32">
+                                            <TextBox Grid.Column="0" Text="{Binding BackgroundColor}"/>
+                                            <Button Grid.Column="1" Width="28" Height="28"
+                                                    Padding="0" Margin="4,0,0,0"
+                                                    Background="{Binding BackgroundColorObj, Converter={x:Static converters:ColorBrushConverter.Instance}}"
+                                                    BorderBrush="#3a3a4a" BorderThickness="1"
+                                                    CornerRadius="6">
+                                                 <Button.Flyout>
+                                                     <Flyout Placement="Bottom">
+                                                         <ColorPicker Color="{Binding BackgroundColorObj, Mode=TwoWay}"
+                                                                      Width="260"/>
+                                                     </Flyout>
+                                                 </Button.Flyout>
+                                            </Button>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Spacing="6">
+                                        <TextBlock Text="{Binding LabelTextColor}" Classes="Label"/>
+                                        <Grid ColumnDefinitions="*,32">
+                                            <TextBox Grid.Column="0" Text="{Binding TextColor}"/>
+                                            <Button Grid.Column="1" Width="28" Height="28"
+                                                    Padding="0" Margin="4,0,0,0"
+                                                    Background="{Binding TextColorObj, Converter={x:Static converters:ColorBrushConverter.Instance}}"
+                                                    BorderBrush="#3a3a4a" BorderThickness="1"
+                                                    CornerRadius="6">
+                                                 <Button.Flyout>
+                                                     <Flyout Placement="Bottom">
+                                                         <ColorPicker Color="{Binding TextColorObj, Mode=TwoWay}"
+                                                                      Width="260"/>
+                                                     </Flyout>
+                                                 </Button.Flyout>
+                                            </Button>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+
+                                <StackPanel Spacing="6">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding LabelCornerRadius}" Classes="Label"/>
+                                        <Border Grid.Column="1"
+                                                Background="#1e1e28" BorderBrush="#2a2a3a"
+                                                BorderThickness="1" CornerRadius="4"
+                                                Padding="8,3">
+                                            <TextBlock Text="{Binding CornerRadius}"
+                                                       FontSize="11" Foreground="#7c6af5"/>
+                                        </Border>
+                                    </Grid>
+                                    <Slider Minimum="0" Maximum="50" Value="{Binding CornerRadius}"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{Binding LabelFont}" Classes="Label"/>
+                                    <ComboBox ItemsSource="{Binding AvailableFonts}"
+                                              SelectedItem="{Binding SelectedFont}"
+                                              HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Classes="Card">
+                             <StackPanel Spacing="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="{Binding LabelContent}" Classes="SectionHeader"/>
+                                    <TextBlock Text="^" FontSize="12" Foreground="#666"/>
+                                </Grid>
+                                
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding LabelShowIcon}"
+                                               Classes="Label" VerticalAlignment="Center"/>
+                                    <ToggleSwitch Grid.Column="1"
+                                                  IsChecked="{Binding ShowIcon}"
+                                                  OffContent="" OnContent=""/>
+                                </Grid>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{Binding LabelIcon}" Classes="Label"/>
+                                    <ComboBox ItemsSource="{Binding AvailableIcons}"
+                                              SelectedItem="{Binding SelectedIcon}"
+                                              HorizontalAlignment="Stretch"
+                                              IsEnabled="{Binding ShowIcon}"/>
+                                </StackPanel>
+                             </StackPanel>
+                        </Border>
+
+                        <Border Classes="Card">
+                            <StackPanel Spacing="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="{Binding LabelBehavior}" Classes="SectionHeader"/>
+                                    <TextBlock Text="^" FontSize="12" Foreground="#666"/>
+                                </Grid>
+
+                                <StackPanel Spacing="6">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding LabelDuration}" Classes="Label"/>
+                                        <Border Grid.Column="1"
+                                                Background="#1e1e28" BorderBrush="#2a2a3a"
+                                                BorderThickness="1" CornerRadius="4"
+                                                Padding="8,3">
+                                            <TextBlock FontSize="11" Foreground="#5de6c8"
+                                                       Text="{Binding DisplayDurationSeconds, StringFormat={}{0}s}"/>
+                                        </Border>
+                                    </Grid>
+                                    <Slider Minimum="2" Maximum="30" Value="{Binding DisplayDurationSeconds}"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{Binding LabelAnimation}" Classes="Label"/>
+                                    <ComboBox ItemsSource="{Binding AnimationTypes}"
+                                              SelectedItem="{Binding AnimationType}"
+                                              HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{Binding LabelPosition}" Classes="Label"/>
+                                    <ComboBox ItemsSource="{Binding Positions}"
+                                              SelectedItem="{Binding Position}"
+                                              HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+
+                                <Border Classes="Divider"/>
+
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding LabelCloseOnClick}"
+                                               Classes="Label" VerticalAlignment="Center"/>
+                                    <ToggleSwitch Grid.Column="1"
+                                                  IsChecked="{Binding CloseOnClick}"
+                                                  OffContent="" OnContent=""/>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding LabelShowProgressBar}"
+                                               Classes="Label" VerticalAlignment="Center"/>
+                                    <ToggleSwitch Grid.Column="1"
+                                                  IsChecked="{Binding ShowProgressBar}"
+                                                  OffContent="" OnContent=""/>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding CanStartWithSystem}">
+                                    <TextBlock Grid.Column="0" Text="{Binding LabelStartWithSystem}"
+                                               Classes="Label" VerticalAlignment="Center"/>
+                                    <ToggleSwitch Grid.Column="1"
+                                                  IsChecked="{Binding StartWithSystem}"
+                                                  OffContent="" OnContent=""/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Classes="Card" BorderBrush="#3f1a1a" Background="#1a0f0f" Margin="0,20,0,0">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="{Binding LabelUninstall}" Foreground="#ff6b6b" FontWeight="SemiBold"/>
+                                <Button Content="{Binding LabelUninstall}"
+                                        Classes="Danger" HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        Padding="12"
+                                        BorderBrush="#ff4444" BorderThickness="1"
+                                        CornerRadius="6"
+                                        Command="{Binding UninstallApp}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Height="60"/>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Grid x:Name="TextsTab" Grid.Row="0" IsVisible="False"
+                      RowDefinitions="Auto,*">
+
+                    <Border Grid.Row="0" Classes="Card" Margin="20,20,20,8">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="إضافة نص جديد" Classes="SectionHeader"/>
+                            <TextBlock Classes="Label"
+                                       Text="النصوص المضافة يمكن حذفها لاحقاً. النصوص الأساسية محمية ولا تُحذف."/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding TextsVm.NewText, Mode=TwoWay}"
+                                         Watermark="اكتب النص هنا... مثل: سبحان الله وبحمده"
+                                         TextAlignment="Right"
+                                         Margin="0,0,8,0"/>
+                                <Button Grid.Column="1" Content="+ إضافة"
+                                        Classes="Primary"
+                                        IsEnabled="{Binding TextsVm.CanAdd}"
+                                        Click="AddText_Click"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" Padding="20,0,20,40"
+                                  VerticalScrollBarVisibility="Visible">
+                        <StackPanel Spacing="10">
+
+                            <StackPanel Spacing="6">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="🔒 النصوص الأساسية"
+                                               Classes="SectionHeader"/>
+                                    <Border Background="#1f1a3d"
+                                            BorderBrush="#3d2fa0"
+                                            BorderThickness="1" CornerRadius="10"
+                                            Padding="8,2">
+                                        <TextBlock Text="{Binding TextsVm.CoreCount}"
+                                                   FontSize="10" Foreground="#7c6af5"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <ItemsControl ItemsSource="{Binding TextsVm.CoreTexts}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="models:ToastText">
+                                            <Border Classes="Card" Margin="0,0,0,4"
+                                                    Padding="12,10">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <TextBlock Grid.Column="0"
+                                                               Text="{Binding Text}"
+                                                               FontSize="14"
+                                                               TextAlignment="Right"
+                                                               TextWrapping="Wrap"/>
+                                                    <Border Grid.Column="1"
+                                                            Background="#1a1530"
+                                                            CornerRadius="4" Padding="6,2"
+                                                            Margin="8,0,0,0">
+                                                        <TextBlock Text="محمي" FontSize="9"
+                                                                   Foreground="#7c6af5"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="✏ نصوصي" Classes="SectionHeader"/>
+                                    <Border Background="#0f2e2a"
+                                            BorderBrush="#1d6b5f"
+                                            BorderThickness="1" CornerRadius="10"
+                                            Padding="8,2">
+                                        <TextBlock Text="{Binding TextsVm.UserCount}"
+                                                   FontSize="10" Foreground="#5de6c8"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <Border Classes="Card" Padding="20"
+                                        IsVisible="{Binding TextsVm.IsUserTextsEmpty}">
+                                    <TextBlock Text="لم تضف أي نصوص بعد. أضف نصاً من الأعلى ✦"
+                                               Classes="Label"
+                                               TextAlignment="Center"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+
+                                <ItemsControl ItemsSource="{Binding TextsVm.UserTexts}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="models:ToastText">
+                                            <Border Classes="Card" Margin="0,0,0,4"
+                                                    Padding="12,10">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <TextBlock Grid.Column="0"
+                                                               Text="{Binding Text}"
+                                                               FontSize="14"
+                                                               TextAlignment="Right"
+                                                               TextWrapping="Wrap"
+                                                               VerticalAlignment="Center"/>
+                                                    <Button Grid.Column="1"
+                                                            Content="🗑"
+                                                            Classes="Danger"
+                                                            Tag="{Binding Id}"
+                                                            Click="DeleteText_Click"
+                                                            Margin="8,0,0,0"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                            </StackPanel>
+
+                            <Border Height="60"/>
+                            
+                        </StackPanel>
+                    </ScrollViewer>
+
+                </Grid>
+
+                <ScrollViewer x:Name="HowToUseTab" Grid.Row="0" IsVisible="False"
+                              Padding="20,20,20,40" VerticalScrollBarVisibility="Visible">
+                    <StackPanel Spacing="16">
+                        <Border Classes="Card" Padding="20">
+                            <TextBlock Text="{Binding LabelHowToUseContent}"
+                                       FontSize="14" LineHeight="24"
+                                       TextWrapping="Wrap"
+                                       Foreground="#e8e8f0"/>
+                        </Border>
+                        
+                        <Border Classes="Card" Padding="16">
+                             <StackPanel Spacing="10">
+                                 <TextBlock Text="Desktop Shortcut / اختصار سطح المكتب" Classes="SectionHeader"/>
+                                 <Button Content="Create Shortcut / إنشاء اختصار"
+                                         Classes="Primary" HorizontalAlignment="Left"
+                                         Click="CreateShortcut_Click"/>
+                             </StackPanel>
+                        </Border>
+
+                        <Border Height="60"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>

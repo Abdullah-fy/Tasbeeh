@@ -1,0 +1,5 @@
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\publishnowwithexeonly\MacOS\Apple_Silicon\Tasbeeh.pdb
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\publishnowwithexeonly\MacOS\Apple_Silicon\libAvaloniaNative.dylib
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\publishnowwithexeonly\MacOS\Apple_Silicon\libHarfBuzzSharp.dylib
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\publishnowwithexeonly\MacOS\Apple_Silicon\libSkiaSharp.dylib
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\publishnowwithexeonly\MacOS\Apple_Silicon\Tasbeeh

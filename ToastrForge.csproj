@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         ToastrForge — برنامج إشعارات إسلامية خفيف
+         CrossPlatform: Windows / Linux / macOS
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>Tasbeeh</AssemblyName>
+    <Product>Tasbeeh</Product>
+    <ApplicationIcon>Assets\tasbeeh.ico</ApplicationIcon>
+    <RootNamespace>ToastrForge</RootNamespace>
+
+    <!-- Icon (ضيف ملف Assets/icon.ico وفعّل السطر ده) -->
+    <!-- <ApplicationIcon>Assets\icon.ico</ApplicationIcon> -->
+
+    <!-- Trim للتقليل من الحجم في Release -->
+    <PublishTrimmed>false</PublishTrimmed>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+
+  <!-- ══ NuGet Packages ══════════════════════════════════════════════════ -->
+  <ItemGroup>
+    <!-- Avalonia core + themes -->
+    <PackageReference Include="Avalonia" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
+
+    <!-- MVVM / ReactiveUI -->
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.0" />
+
+    <!-- Diagnostics (Debug only) -->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.1.0" />
+  </ItemGroup>
+
+  <!-- ══ Assets ═══════════════════════════════════════════════════════════
+       core_texts.json يُنسخ لمجلد التطبيق عند البناء
+       هو "محمي" لأنه مضمن في الـ Assets ومش في AppData
+       ══════════════════════════════════════════════════════════════════ -->
+  <ItemGroup>
+    <Content Include="Assets\core_texts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- لو عندك icon -->
+    <!-- <Content Include="Assets\icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content> -->
+  </ItemGroup>
+
+  <!-- ══ AXAML Compilation ════════════════════════════════════════════════ -->
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**"/>
+  </ItemGroup>
+
+</Project>
+<!-- Trigger VS Reload -->

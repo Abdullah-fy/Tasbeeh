@@ -1,0 +1,3 @@
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\bin\Release\net8.0\win-x64\publish\ToastrForge.pdb
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\bin\Release\net8.0\win-x64\publish\Assets\core_texts.json
+C:\Users\Root\Desktop\CodeArea\avalonio\appOne\ZakerV1\ZakerV1\bin\Release\net8.0\win-x64\publish\ToastrForge.exe
