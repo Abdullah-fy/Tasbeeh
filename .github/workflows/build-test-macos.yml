@@ -30,14 +30,14 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore ZakerV1/ToastrForge.csproj
+        run: dotnet restore ToastrForge.csproj
 
       - name: Build
-        run: dotnet build ZakerV1/ToastrForge.csproj -c Release --no-restore
+        run: dotnet build ToastrForge.csproj -c Release --no-restore
 
       - name: Publish (Self-Contained)
         run: |
-          dotnet publish ZakerV1/ToastrForge.csproj \
+          dotnet publish ToastrForge.csproj \
             -c Release \
             -r ${{ matrix.rid }} \
             --self-contained true \
@@ -49,10 +49,8 @@ jobs:
           mkdir -p "$APP/Contents/MacOS"
           mkdir -p "$APP/Contents/Resources"
 
-          # Copy all published files to MacOS folder
           cp -R publish/${{ matrix.rid }}/* "$APP/Contents/MacOS/"
 
-          # Create Info.plist
           cat > "$APP/Contents/Info.plist" << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -99,7 +97,7 @@ jobs:
           cat publish/Tasbeeh.app/Contents/Info.plist
 
           echo ""
-          echo "=== Try launching (headless check) ==="
+          echo "=== Executable type ==="
           file publish/Tasbeeh.app/Contents/MacOS/Tasbeeh
 
       - name: Upload .app as Artifact

@@ -20,14 +20,14 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore ZakerV1/ToastrForge.csproj
+        run: dotnet restore ToastrForge.csproj
 
       - name: Build
-        run: dotnet build ZakerV1/ToastrForge.csproj -c Release --no-restore
+        run: dotnet build ToastrForge.csproj -c Release --no-restore
 
       - name: Publish (Self-Contained)
         run: |
-          dotnet publish ZakerV1/ToastrForge.csproj \
+          dotnet publish ToastrForge.csproj \
             -c Release \
             -r linux-x64 \
             --self-contained true \
