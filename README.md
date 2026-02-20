@@ -50,5 +50,13 @@
     *   **الأذكار الأساسية**: مدمجة ومحمية داخل التطبيق.
 
 ---
+#⚠️ تنبيه مهم قبل التثبيت
+عند تشغيل البرنامج قد يظهر تحذير من Microsoft Defender SmartScreen، هذا طبيعي تماماً لأن البرنامج مجاني ومفتوح المصدر وغير موقّع رقمياً.
+لتشغيله: اضغط "More info" ثم "Run anyway"
+
+#⚠️ Important Notice Before Installing
+You may see a Microsoft Defender SmartScreen warning when running the installer. This is completely normal for free, open-source applications that are not digitally signed.
+To proceed: Click "More info" then "Run anyway"
+The application is fully safe and its source code is publicly available for review in this repository.
 
 Made with ❤️ for the Ummah.
