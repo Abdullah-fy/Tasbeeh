@@ -1,0 +1,110 @@
+name: Build & Test on macOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-mac:
+    strategy:
+      matrix:
+        include:
+          - os: macos-14
+            rid: osx-arm64
+            label: Apple Silicon
+          - os: macos-13
+            rid: osx-x64
+            label: Intel
+
+    runs-on: ${{ matrix.os }}
+    name: Build (${{ matrix.label }})
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore ZakerV1/ToastrForge.csproj
+
+      - name: Build
+        run: dotnet build ZakerV1/ToastrForge.csproj -c Release --no-restore
+
+      - name: Publish (Self-Contained)
+        run: |
+          dotnet publish ZakerV1/ToastrForge.csproj \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            -o publish/${{ matrix.rid }}
+
+      - name: Create .app Bundle
+        run: |
+          APP="publish/Tasbeeh.app"
+          mkdir -p "$APP/Contents/MacOS"
+          mkdir -p "$APP/Contents/Resources"
+
+          # Copy all published files to MacOS folder
+          cp -R publish/${{ matrix.rid }}/* "$APP/Contents/MacOS/"
+
+          # Create Info.plist
+          cat > "$APP/Contents/Info.plist" << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleName</key>
+              <string>Tasbeeh</string>
+              <key>CFBundleDisplayName</key>
+              <string>Tasbeeh</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.tasbeeh.app</string>
+              <key>CFBundleVersion</key>
+              <string>1.0.0</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0.0</string>
+              <key>CFBundleExecutable</key>
+              <string>Tasbeeh</string>
+              <key>CFBundleIconFile</key>
+              <string>AppIcon</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>10.15</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+
+          echo "APPL????" > "$APP/Contents/PkgInfo"
+          chmod +x "$APP/Contents/MacOS/Tasbeeh"
+
+      - name: Verify .app Bundle
+        run: |
+          echo "=== .app structure ==="
+          find publish/Tasbeeh.app -type f | head -20
+
+          echo ""
+          echo "=== File permissions ==="
+          ls -la publish/Tasbeeh.app/Contents/MacOS/Tasbeeh
+
+          echo ""
+          echo "=== Info.plist ==="
+          cat publish/Tasbeeh.app/Contents/Info.plist
+
+          echo ""
+          echo "=== Try launching (headless check) ==="
+          file publish/Tasbeeh.app/Contents/MacOS/Tasbeeh
+
+      - name: Upload .app as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tasbeeh-${{ matrix.rid }}
+          path: publish/Tasbeeh.app
+          retention-days: 7

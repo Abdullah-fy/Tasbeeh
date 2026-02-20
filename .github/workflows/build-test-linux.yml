@@ -1,0 +1,55 @@
+name: Build & Test on Linux
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    name: Build (Linux x64)
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore ZakerV1/ToastrForge.csproj
+
+      - name: Build
+        run: dotnet build ZakerV1/ToastrForge.csproj -c Release --no-restore
+
+      - name: Publish (Self-Contained)
+        run: |
+          dotnet publish ZakerV1/ToastrForge.csproj \
+            -c Release \
+            -r linux-x64 \
+            --self-contained true \
+            -o publish/linux-x64
+
+      - name: Verify Output
+        run: |
+          echo "=== Published files ==="
+          ls -la publish/linux-x64/
+
+          echo ""
+          echo "=== Executable check ==="
+          file publish/linux-x64/Tasbeeh
+          chmod +x publish/linux-x64/Tasbeeh
+
+          echo ""
+          echo "=== Size ==="
+          du -sh publish/linux-x64/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tasbeeh-linux-x64
+          path: publish/linux-x64/
+          retention-days: 7

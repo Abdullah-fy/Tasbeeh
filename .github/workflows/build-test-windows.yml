@@ -1,0 +1,72 @@
+name: Build & Test on Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    name: Build (Windows x64)
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore ZakerV1/ToastrForge.csproj
+
+      - name: Build
+        run: dotnet build ZakerV1/ToastrForge.csproj -c Release --no-restore
+
+      - name: Publish (Self-Contained)
+        run: |
+          dotnet publish ZakerV1/ToastrForge.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -o publish/win-x64
+
+      - name: Self-Sign the Executable
+        shell: pwsh
+        run: |
+          $cert = New-SelfSignedCertificate `
+            -Subject "CN=Abdullah Tech Solutions" `
+            -Type CodeSigningCert `
+            -CertStoreLocation "Cert:\CurrentUser\My"
+
+          $pwd = ConvertTo-SecureString "ActionPassword123!" -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath "temp_cert.pfx" -Password $pwd
+
+          $signtool = (Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe" `
+            | Sort-Object LastWriteTime -Descending `
+            | Select-Object -First 1).FullName
+
+          & $signtool sign /fd SHA256 /f "temp_cert.pfx" /p "ActionPassword123!" `
+            /tr http://timestamp.digicert.com /td SHA256 `
+            "publish/win-x64/Tasbeeh.exe"
+
+          Remove-Item "temp_cert.pfx" -Force
+
+      - name: Verify Output
+        shell: pwsh
+        run: |
+          echo "=== Published files ==="
+          Get-ChildItem publish/win-x64/ | Format-Table Name, Length
+
+          echo ""
+          echo "=== Signature check ==="
+          Get-AuthenticodeSignature publish/win-x64/Tasbeeh.exe
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tasbeeh-win-x64
+          path: publish/win-x64/
+          retention-days: 7

@@ -1,0 +1,37 @@
+name: Sign Windows Executable
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sign:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Self-Sign the Executable
+        shell: pwsh
+        run: |
+          # 1. Generate a temporary self-signed Code Signing Certificate
+          $cert = New-SelfSignedCertificate `
+            -Subject "CN=Abdullah Tech Solutions" `
+            -Type CodeSigningCert `
+            -CertStoreLocation "Cert:\CurrentUser\My"
+
+          # 2. Export it to a temporary .pfx file
+          $pwd = ConvertTo-SecureString "ActionPassword123!" -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath "temp_cert.pfx" -Password $pwd
+
+          # 3. Find signtool.exe on the GitHub runner
+          $signtool = (Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe" `
+            | Sort-Object LastWriteTime -Descending `
+            | Select-Object -First 1).FullName
+
+          # 4. Sign Tasbeeh.exe
+          & $signtool sign /fd SHA256 /f "temp_cert.pfx" /p "ActionPassword123!" `
+            /tr http://timestamp.digicert.com /td SHA256 `
+            "ZakerV1/dist/win/Tasbeeh.exe"
+
+          # 5. Clean up certificate
+          Remove-Item "temp_cert.pfx" -Force
